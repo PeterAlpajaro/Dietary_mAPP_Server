@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 
 app.post('/restaurants', (req, res) => {
     const { restaurant_id, name, address, city, province, postal_code } = req.body;
-    const query = 'INSERT INTO restaurantTable (id, name, address, city, province, postal_code) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO restaurantTable (restaurant_id, name, address, city, province, postal_code) VALUES (?, ?, ?, ?, ?, ?)';
     
     connection.query(query, [restaurant_id, name, address, city, province, postal_code], (err, result) => {
       if (err) {
