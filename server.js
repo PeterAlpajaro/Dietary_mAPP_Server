@@ -13,13 +13,7 @@ console.log({
     database: process.env.MYSQL_DATABASE
 });
 
-const connection = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  port: process.env.PORT
-});
+const connection = mysql.createConnection(process.env.MYSQL_URL);
 
 connection.connect((err) => {
   if (err) {
