@@ -4,14 +4,10 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
-
 app.use(express.json());
 
-console.log({
-    host: process.env.MYSQLHOST,
-    user: process.env.MYSQLUSER,
-    database: process.env.MYSQL_DATABASE
-});
+console.log(process.env.MYSQL_URL);
+console.log("hello world");
 
 const connection = mysql.createConnection(process.env.MYSQL_URL);
 
