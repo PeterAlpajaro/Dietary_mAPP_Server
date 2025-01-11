@@ -13,6 +13,11 @@ console.log("hello world");
 
 const connection = mysql.createConnection(process.env.MYSQL_URL);
 
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting to the database: ' + err.stack);
@@ -21,11 +26,22 @@ connection.connect((err) => {
   console.log('Connected to database.');
 });
 
+
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
 app.post('/restaurants', (req, res) => {
-    const { name, cuisine, location } = req.body;
-    const query = 'INSERT INTO restaurants (name, cuisine, location) VALUES (?, ?, ?)';
+    const { id, name, address, city, province, postal_code } = req.body;
+    const query = 'INSERT INTO restaurantTable (id, name, address, city, province, postal_code) VALUES (?, ?, ?, ?, ?, ?)';
     
-    connection.query(query, [name, cuisine, location], (err, result) => {
+    connection.query(query, [id, name, address, city, province, postal_code], (err, result) => {
       if (err) {
         res.status(500).json({ error: 'Error adding restaurant' });
         return;
@@ -37,7 +53,7 @@ app.post('/restaurants', (req, res) => {
 
 app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id;
-  const query = 'SELECT * FROM restaurants WHERE restaurantID = ?';
+  const query = 'SELECT * FROM restaurantTable WHERE restaurantID = ?';
   
   connection.query(query, [id], (err, results) => {
     if (err) {
