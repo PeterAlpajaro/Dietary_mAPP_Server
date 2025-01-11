@@ -41,7 +41,7 @@ app.post('/restaurants', (req, res) => {
     const { restaurant_id, name, address, city, province, postal_code } = req.body;
     const query = 'INSERT INTO restaurantTable (id, name, address, city, province, postal_code) VALUES (?, ?, ?, ?, ?, ?)';
     
-    connection.query(query, [id, name, address, city, province, postal_code], (err, result) => {
+    connection.query(query, [restaurant_id, name, address, city, province, postal_code], (err, result) => {
       if (err) {
         res.status(500).json({ error: 'Error adding restaurant' });
         return;
