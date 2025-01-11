@@ -2,18 +2,23 @@ const mysql = require('mysql2');
 
 require('dotenv').config()
 const express = require('express');
-const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
 
+console.log({
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    database: process.env.MYSQL_DATABASE
+});
 
 const connection = mysql.createConnection({
   host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQL_DATABASE
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.PORT
 });
 
 connection.connect((err) => {
