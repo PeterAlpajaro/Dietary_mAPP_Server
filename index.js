@@ -30,6 +30,7 @@ connection.connect((err) => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  console.error(err.message);
   res.status(500).send('Something broke!');
 });
 
@@ -43,6 +44,7 @@ app.post('/restaurants', (req, res) => {
     
     connection.query(query, [restaurant_id, name, address, city, province, postal_code], (err, result) => {
       if (err) {
+        console.error(err.message);
         res.status(500).json({ error: 'Error adding restaurant' });
         return;
       }
