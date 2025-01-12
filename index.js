@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 // const port = process.env.PORT || 8080;
-app.use(express.json());
+app.use(express.json({limit: '1mb'}));
 
 var restaurant_number = 40;
 var item_number = 40;
