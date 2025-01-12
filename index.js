@@ -5,11 +5,19 @@ const mysql = require('mysql2');
 require('dotenv').config()
 const express = require('express');
 const app = express();
+const cors = require('cors');
 // const port = process.env.PORT || 8080;
 app.use(express.json());
 
 var restaurant_number = 40;
 var item_number = 40;
+
+// Allow requests from your front-end domain
+app.use(cors({
+  origin: 'http://localhost:5174', // Replace with your front-end app's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 
 console.log(process.env.MYSQL_URL);
 console.log("hello world");
