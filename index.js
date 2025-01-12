@@ -75,7 +75,7 @@ app.get('/restaurants/:yelp_key', (req, res) => {
   const id = req.params.yelp_key;
   const query = 'SELECT * FROM restaurantTable WHERE yelp_key = ?';
   
-  connection.query(query, [yelp_key], (err, results) => {
+  connection.query(query, [id], (err, results) => {
     if (err) {
       res.status(500).json({ error: 'Error fetching restaurant' });
       return;
