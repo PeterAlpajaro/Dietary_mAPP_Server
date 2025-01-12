@@ -8,6 +8,9 @@ const app = express();
 // const port = process.env.PORT || 8080;
 app.use(express.json());
 
+var restaurant_number = 0;
+var item_number = 0;
+
 console.log(process.env.MYSQL_URL);
 console.log("hello world");
 
@@ -42,10 +45,16 @@ app.get('/', (req, res) => {
 
 // Restaurants. We want to add, and make sure that we don't add duplicates to the database.
 app.post('/restaurants', (req, res) => {
-    const { restaurant_id, name, address } = req.body;
-    const query = 'INSERT INTO restaurantTable (restaurant_id, name, address) VALUES (?, ?, ?)';
+    const { yelp_key, name, address, latitude, longitude } = req.body;
+    const query = 'INSERT INTO restaurantTable (restaurant_id, yelp_key, name, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)';
     
-    connection.query(query, [restaurant_id, name, address], (err, result) => {
+    // Restaurant Id generation. Find the largest and then choose that?
+    const restaurant_id = restaurant_number;
+    ++restaurant_number;
+    // 
+
+
+    connection.query(query, [restaurant_id, yelp_key, name, address, latitude, longitude], (err, result) => {
       if (err) {
         if (err.code === 'ER_DUP_ENTRY') {
           res.status(409).json({ error: 'Restaurant already exists' });
@@ -61,12 +70,12 @@ app.post('/restaurants', (req, res) => {
     });
 });
 
-// Get restaurant from ID
-app.get('/restaurants/:id', (req, res) => {
-  const id = req.params.id;
-  const query = 'SELECT * FROM restaurantTable WHERE restaurant_id = ?';
+// Get restaurant from yelpkey.
+app.get('/restaurants/:yelp_key', (req, res) => {
+  const id = req.params.yelp_key;
+  const query = 'SELECT * FROM restaurantTable WHERE yelp_key = ?';
   
-  connection.query(query, [id], (err, results) => {
+  connection.query(query, [yelp_key], (err, results) => {
     if (err) {
       res.status(500).json({ error: 'Error fetching restaurant' });
       return;
@@ -81,9 +90,19 @@ app.get('/restaurants/:id', (req, res) => {
 
 
 
-// Menu Items, we want to just add here, checking for duplicates too complicated.
+// Menu Items, we want to just add here, checking for duplicates too complicated. YOU NEED TO 
+// DO AN API CALL TO GET THE RESTAURANT's ID USING ITS YELP KEY BEFORE YOU ACTUALLY GET THE RESTAURANT ID.
 app.post('/menuItems', (req, res) => {
-  const {item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree} = req.body;
+  const {restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree} = req.body;
+  
+  // Get restaurant id from yelp_key
+  
+
+  // Unique item id
+  const item_id = item_number;
+  item_number++;
+  //
+
   const query = 'INSERT INTO menuItems (item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
   connection.query(query, [item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree], (err, result) => {
     if (err) {
@@ -97,7 +116,7 @@ app.post('/menuItems', (req, res) => {
 
 });
 
-// Get menu items from restaurant id.
+// Get menu items from yelp_key
 app.get('/menuItems/:restaurant_id', (req, res) => {
   const restaurant_id = req.params.restaurant_id;
   const query = 'SELECT * FROM menuItems WHERE restaurant_id = ?';
