@@ -65,11 +65,11 @@ app.post('/restaurants', (req, res) => {
     connection.query(query, [restaurant_id, yelp_key, name, address, latitude, longitude], (err, result) => {
       if (err) {
         if (err.code === 'ER_DUP_ENTRY') {
-          res.status(409).json({ error: 'Restaurant already exists' });
+          return res.status(409).json({ error: 'Restaurant already exists' });
 
         } else {
           console.error(err.message);
-          res.status(500).json({ error: 'Error adding restaurant' });
+          return res.status(500).json({ error: 'Error adding restaurant' });
           return;
         }
         
