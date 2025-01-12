@@ -98,7 +98,7 @@ app.post('/menuItems', (req, res) => {
 });
 
 // Get menu items from restaurant id.
-app.get('/menuItems/:id', (req, res) => {
+app.get('/menuItems/:restaurant_id', (req, res) => {
   const restaurant_id = req.params.restaurant_id;
   const query = 'SELECT * FROM menuItems WHERE restaurant_id = ?';
   
