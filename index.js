@@ -74,7 +74,7 @@ app.post('/restaurants', (req, res) => {
         }
         
       }
-      res.status(201).json({ id: result.insertId, message: 'Restaurant added successfully' });
+      res.status(201).json({ message: 'Restaurant added successfully' });
     });
 });
 
