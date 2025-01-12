@@ -93,15 +93,12 @@ app.get('/restaurants/:yelp_key', (req, res) => {
 // Menu Items, we want to just add here, checking for duplicates too complicated. YOU NEED TO 
 // DO AN API CALL TO GET THE RESTAURANT's ID USING ITS YELP KEY BEFORE YOU ACTUALLY GET THE RESTAURANT ID.
 app.post('/menuItems', (req, res) => {
-  const {restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree} = req.body;
-  
-  // Get restaurant id from yelp_key
-  
+  const {yelp_key, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree} = req.body;
 
-  // Unique item id
+  // Generate our item id.
   const item_id = item_number;
   item_number++;
-  //
+
 
   const query = 'INSERT INTO menuItems (item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
   connection.query(query, [item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree], (err, result) => {
@@ -117,11 +114,11 @@ app.post('/menuItems', (req, res) => {
 });
 
 // Get menu items from yelp_key
-app.get('/menuItems/:restaurant_id', (req, res) => {
-  const restaurant_id = req.params.restaurant_id;
-  const query = 'SELECT * FROM menuItems WHERE restaurant_id = ?';
+app.get('/menuItems/:yelp_key', (req, res) => {
+  const yelp_key = req.params.yelp_key;
+  const query = 'SELECT * FROM menuItems WHERE yelp_key = ?';
   
-  connection.query(query, [restaurant_id], (err, results) => {
+  connection.query(query, [yelp_key], (err, results) => {
     if (err) {
       res.status(500).json({ error: 'Error fetching menu items' });
       return;
