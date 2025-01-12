@@ -8,8 +8,8 @@ const app = express();
 // const port = process.env.PORT || 8080;
 app.use(express.json());
 
-var restaurant_number = 20;
-var item_number = 20;
+var restaurant_number = 40;
+var item_number = 40;
 
 console.log(process.env.MYSQL_URL);
 console.log("hello world");
