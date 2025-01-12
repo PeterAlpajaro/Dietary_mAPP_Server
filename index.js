@@ -100,7 +100,7 @@ app.post('/menuItems', (req, res) => {
   item_number++;
 
 
-  const query = 'INSERT INTO menuItems (item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+  const query = 'INSERT INTO menuItems (item_id, yelp_key, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
   connection.query(query, [item_id, yelp_key, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree], (err, result) => {
     if (err) {
       console.error(err.message);
