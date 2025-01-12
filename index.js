@@ -14,7 +14,7 @@ var item_number = 40;
 
 // Allow requests from your front-end domain
 app.use(cors({
-  origin: 'http://localhost:5174', // Replace with your front-end app's URL
+  origin: true, // Replace with your front-end app's URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 app.post('/restaurants', (req, res) => {
     const { yelp_key, name, address, latitude, longitude } = req.body;
     const query = 'INSERT INTO restaurantTable (restaurant_id, yelp_key, name, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)';
-    
+
     // Restaurant Id generation. Find the largest and then choose that?
     const restaurant_id = restaurant_number;
     ++restaurant_number;
