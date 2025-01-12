@@ -60,6 +60,8 @@ app.post('/restaurants', (req, res) => {
       res.status(201).json({ id: result.insertId, message: 'Restaurant added successfully' });
     });
 });
+
+// Get restaurant from ID
 app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id;
   const query = 'SELECT * FROM restaurantTable WHERE restaurant_id = ?';
@@ -81,9 +83,9 @@ app.get('/restaurants/:id', (req, res) => {
 
 // Menu Items, we want to just add here, checking for duplicates too complicated.
 app.post('/menuItems', (req, res) => {
-  const { item_id, restaurant_id, name} = req.body;
-  const query = 'INSERT INTO menuItems (item_id, restaurant_id, name) VALUES (?, ?, ?)'
-  connection.query(query, [item_id, restaurant_id, name], (err, result) => {
+  const {item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree} = req.body;
+  const query = 'INSERT INTO menuItems (item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+  connection.query(query, [item_id, restaurant_id, name, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree], (err, result) => {
     if (err) {
       console.error(err.message);
       res.status(500).json({ error: 'Error adding menu item' });
@@ -95,53 +97,20 @@ app.post('/menuItems', (req, res) => {
 
 });
 
+// Get menu items from restaurant id.
 app.get('/menuItems/:id', (req, res) => {
-  const id = req.params.id;
-  const query = 'SELECT * FROM menuItems WHERE item_id = ?';
+  const restaurant_id = req.params.restaurant_id;
+  const query = 'SELECT * FROM menuItems WHERE restaurant_id = ?';
   
-  connection.query(query, [id], (err, results) => {
+  connection.query(query, [restaurant_id], (err, results) => {
     if (err) {
-      res.status(500).json({ error: 'Error fetching menu item' });
+      res.status(500).json({ error: 'Error fetching menu items' });
       return;
     }
     if (results.length === 0) {
-      res.status(404).json({ message: 'Menu item not found' });
+      res.status(404).json({ message: 'No menu items found for this restaurant' });
       return;
     }
-    res.json(results[0]);
-  });
-});
-
-
-
-// REVIEW FUNCTIONS
-app.post('/review', (req, res) => {
-  const { review_id, menu_id, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree} = req.body;
-  const query = 'INSERT INTO review (review_id, menu_id, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree) VALUES (?, ?, ?, ?, ?, ?, ?)'
-  connection.query(query, [review_id, menu_id, isVegan, isVegetarian, isNutFree, isPescatarian, isGlutenFree], (err, result) => {
-    if (err) {
-      console.error(err.message);
-      res.status(500).json({ error: 'Error adding review' });
-      return;
-    }
-    res.status(201).json({ id: result.insertId, message: 'review added successfully' });
-  });
-
-
-});
-app.get('/review/:id', (req, res) => {
-  const id = req.params.id;
-  const query = 'SELECT * FROM review WHERE review_id = ?';
-  
-  connection.query(query, [id], (err, results) => {
-    if (err) {
-      res.status(500).json({ error: 'Error fetching review' });
-      return;
-    }
-    if (results.length === 0) {
-      res.status(404).json({ message: 'Review not found' });
-      return;
-    }
-    res.json(results[0]);
+    res.json(results);
   });
 });
