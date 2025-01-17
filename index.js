@@ -37,7 +37,7 @@ connection.connect((err) => {
   console.log('Connected to database.');
 });
 
-
+//hi daevik
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
